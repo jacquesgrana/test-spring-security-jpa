@@ -1,11 +1,13 @@
 package fr.jacgrana.springsecurityjpa.detail;
 
+import fr.jacgrana.springsecurityjpa.entity.Role;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -21,8 +23,16 @@ public class MyUserDetails implements UserDetails {
     public MyUserDetails(User user) {
         this.userName = user.getUserName();
         this.password = user.getPassword();
-        this.active = user.isActive();
-        this.authorities = Arrays.stream(user.getRoles().split(",")).map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
+        this.active = user.getActive();
+        this.authorities = user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getLabel().toString())).collect(Collectors.toList());
+        //System.out.println("log : " + user.getRoles().toString());
+        //this.authorities = new ArrayList<>();
+        /*
+        for(Role role : user.getRoles()) {
+            this.authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getLabel().toString()));
+            //System.out.println("log : " + role.getLabel().toString());
+        }*/
+       // this.authorities = Arrays.stream(user.getRoles().split(",")).map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
     }
 
     public MyUserDetails() {
