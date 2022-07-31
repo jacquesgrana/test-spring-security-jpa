@@ -49,6 +49,8 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers("/admin").hasAuthority(UserRoleEnum.ROLE_ADMIN.toString())
                 .antMatchers("/manager").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                .antMatchers("/user/{id}").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                .antMatchers("/user/all").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
                 .antMatchers("/user").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                 .antMatchers("/").permitAll()
                 .and().formLogin();

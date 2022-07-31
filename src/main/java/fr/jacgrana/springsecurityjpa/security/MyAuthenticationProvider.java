@@ -35,9 +35,9 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
             isUSerIn = false;
         }
         if(isUSerIn) {
-            System.out.println("user : " + username + " / " + password);
+            //System.out.println("user : " + username + " / " + password);
             for(Role role : user.getRoles()) {
-                System.out.println("role : " + role.toString());
+                //System.out.println("role : " + role.toString());
             }
             return new UsernamePasswordAuthenticationToken(
                     user.getUserName(),
