@@ -16,6 +16,11 @@ public class HomeResourceController {
         return("<h1>Bienvenue utilisateur</h1>");
     }
 
+    @GetMapping("/manager")
+    public String manager() {
+        return("<h1>Bienvenue manager</h1>");
+    }
+
     @GetMapping("/admin")
     public String admin() {
         return("<h1>Bienvenue administrateur</h1>");
