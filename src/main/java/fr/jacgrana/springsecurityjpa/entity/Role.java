@@ -23,4 +23,9 @@ public class Role {
     @Column(name = "label")
     @Enumerated(EnumType.STRING)
     private UserRoleEnum label;
+
+    @Override
+    public String toString() {
+        return this.getLabel().toString();
+    }
 }

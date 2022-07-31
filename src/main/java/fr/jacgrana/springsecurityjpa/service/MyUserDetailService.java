@@ -9,10 +9,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class MyUserDetailService implements UserDetailsService {
+public class MyUserDetailService implements IUserDetailService {
 
     @Autowired
     UserRepository userRepository;
@@ -23,5 +25,14 @@ public class MyUserDetailService implements UserDetailsService {
         user.orElseThrow(() -> new UsernameNotFoundException("Utilisateur inconnu avec le login : " + userName));
         //System.out.println("user : " + user.get().getActive() + " / roles : " + user.get().getRoles());
         return user.map(MyUserDetails::new).get();
+    }
+
+    public List<User>  getAllUser() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Boolean isUserIn(String username, String password) {
+        return true;
     }
 }
