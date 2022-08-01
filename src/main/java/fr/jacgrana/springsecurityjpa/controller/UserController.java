@@ -20,6 +20,39 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/")
+    public String home() {
+        return("<h1>Bienvenue</h1>");
+    }
+
+    @GetMapping("/manager")
+    public String manager() {
+        return("<h1>Bienvenue manager</h1>");
+    }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return("<h1>Bienvenue administrateur</h1>");
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(path = "admin/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void create(@RequestBody User user) {
+        this.userService.create(user);
+    }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PutMapping(path = "admin/update/{id}")
+    public void update(@RequestBody User user,  @PathVariable("id") Integer id) {
+        this.userService.update(user, id);
+    }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @DeleteMapping(path = "admin/delete/{id}")
+    public void delete(@PathVariable("id") Integer id) {
+        this.userService.delete(id);
+    }
+
     @GetMapping("/user")
     //@RequestMapping(produces = MediaType.APPLICATION_XHTML_XML)
     public String user() {

@@ -7,6 +7,7 @@ import fr.jacgrana.springsecurityjpa.service.MyUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,13 +33,8 @@ public class SecurityConfiguration {
 
     @Bean
     protected InMemoryUserDetailsManager configureAuthentication() {
-        //auth.userDetailsService(userDetailsService);
-        List<UserDetails> userDetails = new ArrayList<>();
         List<User> users =myUserDetailService.getAllUser();
-        for(User user : users) {
-            userDetails.add(new MyUserDetails(user));
-        }
-                // TODO recuperer liste des user et constriure la liste des user
+        List<UserDetails> userDetails = users.stream().map(u -> new MyUserDetails(u)).collect(Collectors.toList());
         return new InMemoryUserDetailsManager(userDetails);
     }
 
@@ -47,13 +43,17 @@ public class SecurityConfiguration {
 
         http
                 .authorizeRequests()
-                .antMatchers("/admin").hasAuthority(UserRoleEnum.ROLE_ADMIN.toString())
-                .antMatchers("/manager").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
-                .antMatchers("/user/{id}").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
-                .antMatchers("/user/all").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
-                .antMatchers("/user").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
-                .antMatchers("/").permitAll()
-                .and().formLogin();
+                .antMatchers(HttpMethod.GET, "/admin").hasAuthority(UserRoleEnum.ROLE_ADMIN.toString())
+                .antMatchers(HttpMethod.POST, "/admin/create").hasAuthority(UserRoleEnum.ROLE_ADMIN.toString())
+                .antMatchers(HttpMethod.PUT, "/admin/update/{id}").hasAuthority(UserRoleEnum.ROLE_ADMIN.toString())
+                .antMatchers(HttpMethod.DELETE, "/admin/delete/{id}").hasAuthority(UserRoleEnum.ROLE_ADMIN.toString())
+                .antMatchers(HttpMethod.GET, "/manager").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                .antMatchers(HttpMethod.GET, "/user/{id}").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                .antMatchers(HttpMethod.GET, "/user/all").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                .antMatchers(HttpMethod.GET, "/user").hasAnyAuthority(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
+                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .and().formLogin()
+                .and().csrf().disable();  // TODO enlever des que possible
         return http.build();
     }
 
