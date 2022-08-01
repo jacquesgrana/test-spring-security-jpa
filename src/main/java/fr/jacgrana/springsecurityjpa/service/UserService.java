@@ -3,6 +3,7 @@ package fr.jacgrana.springsecurityjpa.service;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import fr.jacgrana.springsecurityjpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +36,11 @@ public class UserService {
             // TODO lancer exception perso
         }
         else {
+
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
+            System.out.println("Encoded password : " + encodedPassword);
             this.userRepository.save(user);
         }
     }
@@ -43,7 +49,10 @@ public class UserService {
         User userInDb = this.read(id);
         if (userInDb != null) {
             userInDb.setActive(updatedUser.getActive());
-            userInDb.setPassword(updatedUser.getPassword());
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = bCryptPasswordEncoder.encode(updatedUser.getPassword());
+            //System.out.println("Encoded password : " + encodedPassword);
+            userInDb.setPassword(encodedPassword);
             userInDb.setRoles(updatedUser.getRoles());
             userRepository.save(userInDb);
         }
