@@ -28,6 +28,7 @@ public class MyUserDetailService implements IUserDetailService {
         return user.map(MyUserDetails::new).get();
     }
 
+    // TODO double emploi avec userService?
     public List<User>  getAllUser() {
         return userRepository.findAll();
     }
