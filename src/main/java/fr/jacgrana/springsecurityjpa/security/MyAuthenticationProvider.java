@@ -1,10 +1,8 @@
 package fr.jacgrana.springsecurityjpa.security;
 
-import fr.jacgrana.springsecurityjpa.entity.Role;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import fr.jacgrana.springsecurityjpa.enums.ErrorCode;
-import fr.jacgrana.springsecurityjpa.exceptions.BadRequestException;
-import fr.jacgrana.springsecurityjpa.service.IUserDetailService;
+import fr.jacgrana.springsecurityjpa.exceptions.BadAuthenticationException;
 import fr.jacgrana.springsecurityjpa.service.MyUserDetailService;
 import fr.jacgrana.springsecurityjpa.service.UserService;
 import lombok.SneakyThrows;
@@ -12,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -30,30 +26,19 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
     @SneakyThrows
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) throws BadAuthenticationException {
         String username = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
-        Boolean isUSerIn = myUserDetailService.isUserIn(username, password);
-
-        User user = userService.findByUsername(username);
-
-        /*
-        if(user == null) {
-            isUSerIn = false;
-        }*/
+        Boolean isUSerIn = myUserDetailService.isUserOk(username, password);
         if(isUSerIn) {
-            //System.out.println("user : " + username + " / " + password);
-            for(Role role : user.getRoles()) {
-                //System.out.println("role : " + role.toString());
-            }
+            User user = userService.findByUsername(username);
             return new UsernamePasswordAuthenticationToken(
                     user.getUserName(),
                     user.getPassword(),
                     user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.toString())).collect(Collectors.toList()));
-
         }
         else {
-            return null;
+            throw new BadAuthenticationException(ErrorCode.BAD_CREDENTIALS, "Authentification ko!");
         }
 
     }

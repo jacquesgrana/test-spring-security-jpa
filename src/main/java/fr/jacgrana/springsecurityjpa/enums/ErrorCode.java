@@ -5,5 +5,7 @@ public enum ErrorCode {
 
     FORBIDDEN_ACCES,
 
-    USER_NOT_FOUND
+    USER_NOT_FOUND,
+
+    BAD_CREDENTIALS
 }

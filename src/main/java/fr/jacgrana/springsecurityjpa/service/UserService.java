@@ -33,16 +33,14 @@ public class UserService {
 
     public void create(User user) throws BadRequestException {
         Optional<User> userOptional = this.userRepository.findByUserName(user.getUserName());
-
         if(userOptional.isPresent()) {
             throw new BadRequestException(ErrorCode.USERNAME_ALREADY_EXISTS, "Il y a déjà un user avec cet username : " + user.getUserName());
         }
         else {
-
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(8);
             String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
             user.setPassword(encodedPassword);
-            System.out.println("Encoded password : " + encodedPassword);
+            //System.out.println("Encoded password : " + encodedPassword);
             this.userRepository.save(user);
         }
     }
@@ -51,7 +49,7 @@ public class UserService {
         User userInDb = this.read(id);
         if (userInDb != null) {
             userInDb.setActive(updatedUser.getActive());
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(8);
             String encodedPassword = bCryptPasswordEncoder.encode(updatedUser.getPassword());
             //System.out.println("Encoded password : " + encodedPassword);
             userInDb.setPassword(encodedPassword);

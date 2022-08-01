@@ -1,6 +1,5 @@
 package fr.jacgrana.springsecurityjpa.service;
 
-import fr.jacgrana.springsecurityjpa.detail.MyUserDetails;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,5 +13,5 @@ public interface IUserDetailService extends UserDetailsService {
 
     public List<User> getAllUser();
 
-    Boolean isUserIn(String username, String password);
+    Boolean isUserOk(String username, String password);
 }

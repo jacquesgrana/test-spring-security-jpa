@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/user/{id}")
-    public User read(@PathVariable("id") Integer id) throws Exception {
+    public User read(@PathVariable("id") Integer id) throws BadRequestException {
         return this.userService.read(id);
     }
 
