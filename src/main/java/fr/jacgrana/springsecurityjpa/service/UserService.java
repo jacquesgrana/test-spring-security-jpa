@@ -1,6 +1,8 @@
 package fr.jacgrana.springsecurityjpa.service;
 
 import fr.jacgrana.springsecurityjpa.entity.User;
+import fr.jacgrana.springsecurityjpa.enums.ErrorCode;
+import fr.jacgrana.springsecurityjpa.exceptions.BadRequestException;
 import fr.jacgrana.springsecurityjpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,25 +17,25 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public User findByUsername(String username) {
+    public User findByUsername(String username) throws BadRequestException {
         Optional<User> user = userRepository.findByUserName(username);
-        return user.orElse(null);
+        return user.orElseThrow(() -> new BadRequestException(ErrorCode.USER_NOT_FOUND, "Pas d'utilisateur avec cet username : " + username));
     }
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public User read(Integer id) {
+    public User read(Integer id) throws BadRequestException {
         Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+        return user.orElseThrow(() -> new BadRequestException(ErrorCode.USER_NOT_FOUND, "Pas d'utilisateur avec cet id : " + id));
     }
 
-    public void create(User user) {
+    public void create(User user) throws BadRequestException {
         Optional<User> userOptional = this.userRepository.findByUserName(user.getUserName());
 
         if(userOptional.isPresent()) {
-            // TODO lancer exception perso
+            throw new BadRequestException(ErrorCode.USERNAME_ALREADY_EXISTS, "Il y a déjà un user avec cet username : " + user.getUserName());
         }
         else {
 
@@ -45,7 +47,7 @@ public class UserService {
         }
     }
 
-    public void update(User updatedUser, Integer id) {
+    public void update(User updatedUser, Integer id) throws BadRequestException {
         User userInDb = this.read(id);
         if (userInDb != null) {
             userInDb.setActive(updatedUser.getActive());
@@ -58,7 +60,7 @@ public class UserService {
         }
     }
 
-    public void delete(Integer id) {
+    public void delete(Integer id) throws BadRequestException {
         User userToDelete = this.read(id);
         if (userToDelete != null) {
             this.userRepository.delete(userToDelete);

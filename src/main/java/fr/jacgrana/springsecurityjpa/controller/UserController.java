@@ -1,6 +1,7 @@
 package fr.jacgrana.springsecurityjpa.controller;
 
 import fr.jacgrana.springsecurityjpa.entity.User;
+import fr.jacgrana.springsecurityjpa.exceptions.BadRequestException;
 import fr.jacgrana.springsecurityjpa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,19 +38,19 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "admin/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void create(@RequestBody User user) {
+    public void create(@RequestBody User user) throws BadRequestException{
         this.userService.create(user);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(path = "admin/update/{id}")
-    public void update(@RequestBody User user,  @PathVariable("id") Integer id) {
+    public void update(@RequestBody User user,  @PathVariable("id") Integer id) throws BadRequestException{
         this.userService.update(user, id);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @DeleteMapping(path = "admin/delete/{id}")
-    public void delete(@PathVariable("id") Integer id) {
+    public void delete(@PathVariable("id") Integer id) throws BadRequestException {
         this.userService.delete(id);
     }
 

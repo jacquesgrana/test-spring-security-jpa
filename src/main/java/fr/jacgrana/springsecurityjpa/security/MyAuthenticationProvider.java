@@ -2,9 +2,12 @@ package fr.jacgrana.springsecurityjpa.security;
 
 import fr.jacgrana.springsecurityjpa.entity.Role;
 import fr.jacgrana.springsecurityjpa.entity.User;
+import fr.jacgrana.springsecurityjpa.enums.ErrorCode;
+import fr.jacgrana.springsecurityjpa.exceptions.BadRequestException;
 import fr.jacgrana.springsecurityjpa.service.IUserDetailService;
 import fr.jacgrana.springsecurityjpa.service.MyUserDetailService;
 import fr.jacgrana.springsecurityjpa.service.UserService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,15 +28,19 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     UserService userService;
 
+    @SneakyThrows
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
         Boolean isUSerIn = myUserDetailService.isUserIn(username, password);
+
         User user = userService.findByUsername(username);
+
+        /*
         if(user == null) {
             isUSerIn = false;
-        }
+        }*/
         if(isUSerIn) {
             //System.out.println("user : " + username + " / " + password);
             for(Role role : user.getRoles()) {

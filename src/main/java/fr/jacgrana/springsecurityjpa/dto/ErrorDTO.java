@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class ErrorDTO {
 
-    private HttpStatus code;
+    private ErrorCode code;
     private String message;
 
 }
