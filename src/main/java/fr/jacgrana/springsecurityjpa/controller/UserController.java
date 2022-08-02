@@ -1,5 +1,6 @@
 package fr.jacgrana.springsecurityjpa.controller;
 
+import fr.jacgrana.springsecurityjpa.dto.ErrorDTO;
 import fr.jacgrana.springsecurityjpa.dto.SignInRequestDTO;
 import fr.jacgrana.springsecurityjpa.dto.SignInResponseDTO;
 import fr.jacgrana.springsecurityjpa.entity.User;
@@ -85,6 +86,7 @@ public class UserController {
         return this.userService.findAll();
     }
 
+  //  @PreAuthorize("hasRole('USER')")
     @GetMapping(path = "/user/{id}")
     public User read(@PathVariable("id") Integer id) throws BadRequestException {
         return this.userService.read(id);

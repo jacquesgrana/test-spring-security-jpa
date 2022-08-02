@@ -2,7 +2,9 @@ package fr.jacgrana.springsecurityjpa.security;
 
 import fr.jacgrana.springsecurityjpa.detail.MyUserDetails;
 import fr.jacgrana.springsecurityjpa.entity.User;
+import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
 import fr.jacgrana.springsecurityjpa.enums.UserRoleEnum;
+import fr.jacgrana.springsecurityjpa.exceptions.ForbiddenAccesException;
 import fr.jacgrana.springsecurityjpa.service.MyUserDetailService;
 import fr.jacgrana.springsecurityjpa.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.ArrayList;
@@ -92,7 +95,7 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.GET, "/user/all").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
                                 .antMatchers(HttpMethod.GET, "/user").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                                 .anyRequest().authenticated())
-                .exceptionHandling()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler()) // .accessDeniedPage("/403.html")
                 .authenticationEntryPoint(jwtEntryPoint)
                 .and()
 
@@ -113,10 +116,16 @@ public class SecurityConfiguration {
 */
 
     @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new MyAccesDeniedHandler();
+    }
+
+    @Bean
     public WebSecurityCustomizer webSecurityCustomizer () {
         return (web) -> web.ignoring()
                 .antMatchers(POST,"/signin")
-                .antMatchers(GET,"/");
+                .antMatchers(GET,"/")
+                .antMatchers(GET,"/unauthorized"); //.antMatchers(GET,"/unauthorized")
     }
 
 

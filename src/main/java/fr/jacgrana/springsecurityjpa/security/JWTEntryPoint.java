@@ -1,5 +1,7 @@
 package fr.jacgrana.springsecurityjpa.security;
 
+import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
+import fr.jacgrana.springsecurityjpa.exceptions.ForbiddenAccesException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -12,8 +14,8 @@ import java.io.IOException;
 @Component
 public class JWTEntryPoint implements AuthenticationEntryPoint {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        authException.printStackTrace();
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws ServletException, IOException {
+        //authException.printStackTrace();
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
     }
 }
