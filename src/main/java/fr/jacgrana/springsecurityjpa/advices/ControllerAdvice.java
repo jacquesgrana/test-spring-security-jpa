@@ -10,16 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 
 @Slf4j
-@RestController
-@org.springframework.web.bind.annotation.ControllerAdvice
+@RestControllerAdvice
+//@org.springframework.web.bind.annotation.ControllerAdvice
 public class ControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
