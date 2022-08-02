@@ -3,6 +3,7 @@ package fr.jacgrana.springsecurityjpa.security;
 import fr.jacgrana.springsecurityjpa.service.MyUserDetailService;
 import fr.jacgrana.springsecurityjpa.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private JWTUtil jwtUtil;
+
+    //private String authorization;
+
+    public JwtRequestFilter(MyUserDetailService userDetailService, JWTUtil jwtUtil) { //, String authorization
+        super();
+        this.userDetailService = userDetailService;
+        this.jwtUtil = jwtUtil;
+        //this.authorization = authorization;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

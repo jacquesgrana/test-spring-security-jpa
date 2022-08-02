@@ -4,6 +4,7 @@ import fr.jacgrana.springsecurityjpa.detail.MyUserDetails;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import fr.jacgrana.springsecurityjpa.enums.UserRoleEnum;
 import fr.jacgrana.springsecurityjpa.service.MyUserDetailService;
+import fr.jacgrana.springsecurityjpa.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,15 +46,18 @@ public class SecurityConfiguration {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+    @Autowired
+    private JWTUtil jwtUtil;
+
     @Bean
-    protected InMemoryUserDetailsManager configureAuthentication() {
+    public InMemoryUserDetailsManager configureAuthentication() {
         List<User> users = myUserDetailService.getAllUser();
         List<UserDetails> userDetails = users.stream().map(u -> new MyUserDetails(u)).collect(Collectors.toList());
         return new InMemoryUserDetailsManager(userDetails);
     }
 
     @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception { //.and().csrf().disable() http.csrf().disable();
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception { //.and().csrf().disable() http.csrf().disable();
 /*
         http
                 .authorizeRequests()
@@ -76,17 +80,28 @@ public class SecurityConfiguration {
         return http.build();*/
 
         http
-                .authorizeRequests((query)-> query.anyRequest().authenticated())
+                .authorizeRequests(
+                        (query)-> query
 
+                                .antMatchers(HttpMethod.GET, "/admin").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
+                                .antMatchers(HttpMethod.POST, "/admin/create").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
+                                .antMatchers(HttpMethod.PUT, "/admin/update/{id}").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
+                                .antMatchers(HttpMethod.DELETE, "/admin/delete/{id}").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
+                                .antMatchers(HttpMethod.GET, "/manager").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                                .antMatchers(HttpMethod.GET, "/user/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                                .antMatchers(HttpMethod.GET, "/user/all").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                                .antMatchers(HttpMethod.GET, "/user").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
+                                .anyRequest().authenticated())
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtEntryPoint)
                 .and()
 
                 .httpBasic(Customizer.withDefaults());
-        //JWTfilter jwtFilter = new JWTfilter(accountService, jwtTokenUtils, "Authorization");
+        //jwtUtil = new JWTUtil();
+        //jwtRequestFilter = new JwtRequestFilter(myUserDetailService, jwtUtil, "Authorization");
         //httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
+        //http.addFilter()
         return http.build();
     }
 
