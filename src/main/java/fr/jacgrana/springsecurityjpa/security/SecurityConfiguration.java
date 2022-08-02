@@ -97,8 +97,8 @@ public class SecurityConfiguration {
                                 .anyRequest().authenticated())
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler()) // .accessDeniedPage("/403.html")
                 .authenticationEntryPoint(jwtEntryPoint)
-                .and()
-
+                //.and().cors()
+                .and().csrf().disable()
                 .httpBasic(Customizer.withDefaults());
         //jwtUtil = new JWTUtil();
         //jwtRequestFilter = new JwtRequestFilter(myUserDetailService, jwtUtil, "Authorization");

@@ -13,6 +13,7 @@ import fr.jacgrana.springsecurityjpa.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,18 +58,21 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(path = "/admin/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void create(@RequestBody User user) throws BadRequestException{
         this.userService.create(user);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(path = "/admin/update/{id}")
     public void update(@RequestBody User user,  @PathVariable("id") Integer id) throws BadRequestException{
         this.userService.update(user, id);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(path = "/admin/delete/{id}")
     public void delete(@PathVariable("id") Integer id) throws BadRequestException {
         this.userService.delete(id);
