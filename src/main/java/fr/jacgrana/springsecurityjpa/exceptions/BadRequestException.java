@@ -1,20 +1,20 @@
 package fr.jacgrana.springsecurityjpa.exceptions;
 
-import fr.jacgrana.springsecurityjpa.enums.ErrorCode;
+import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
 
 public class BadRequestException extends Exception{
 
-    private ErrorCode code;
-    public BadRequestException(ErrorCode code, String message) {
+    private ErrorCodeEnum code;
+    public BadRequestException(ErrorCodeEnum code, String message) {
         super(message);
         this.code = code;
     }
 
-    public ErrorCode getCode() {
+    public ErrorCodeEnum getCode() {
         return code;
     }
 
-    public void setCode(ErrorCode code) {
+    public void setCode(ErrorCodeEnum code) {
         this.code = code;
     }
 }

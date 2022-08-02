@@ -1,7 +1,7 @@
 package fr.jacgrana.springsecurityjpa.service;
 
 import fr.jacgrana.springsecurityjpa.entity.User;
-import fr.jacgrana.springsecurityjpa.enums.ErrorCode;
+import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
 import fr.jacgrana.springsecurityjpa.exceptions.BadRequestException;
 import fr.jacgrana.springsecurityjpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class UserService {
 
     public User findByUsername(String username) throws BadRequestException {
         Optional<User> user = userRepository.findByUserName(username);
-        return user.orElseThrow(() -> new BadRequestException(ErrorCode.USER_NOT_FOUND, "Pas d'utilisateur avec cet username : " + username));
+        return user.orElseThrow(() -> new BadRequestException(ErrorCodeEnum.USER_NOT_FOUND, "Pas d'utilisateur avec cet username : " + username));
     }
 
     public List<User> findAll() {
@@ -28,13 +28,13 @@ public class UserService {
 
     public User read(Integer id) throws BadRequestException {
         Optional<User> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new BadRequestException(ErrorCode.USER_NOT_FOUND, "Pas d'utilisateur avec cet id : " + id));
+        return user.orElseThrow(() -> new BadRequestException(ErrorCodeEnum.USER_NOT_FOUND, "Pas d'utilisateur avec cet id : " + id));
     }
 
     public void create(User user) throws BadRequestException {
         Optional<User> userOptional = this.userRepository.findByUserName(user.getUserName());
         if(userOptional.isPresent()) {
-            throw new BadRequestException(ErrorCode.USERNAME_ALREADY_EXISTS, "Il y a déjà un user avec cet username : " + user.getUserName());
+            throw new BadRequestException(ErrorCodeEnum.USERNAME_ALREADY_EXISTS, "Il y a déjà un user avec cet username : " + user.getUserName());
         }
         else {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(8);

@@ -1,11 +1,21 @@
 package fr.jacgrana.springsecurityjpa.controller;
 
+import fr.jacgrana.springsecurityjpa.dto.SignInRequestDTO;
+import fr.jacgrana.springsecurityjpa.dto.SignInResponseDTO;
 import fr.jacgrana.springsecurityjpa.entity.User;
+import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
+import fr.jacgrana.springsecurityjpa.exceptions.BadAuthenticationException;
 import fr.jacgrana.springsecurityjpa.exceptions.BadRequestException;
+import fr.jacgrana.springsecurityjpa.service.MyUserDetailService;
 import fr.jacgrana.springsecurityjpa.service.UserService;
+import fr.jacgrana.springsecurityjpa.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +26,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private MyUserDetailService userDetailService;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -37,19 +56,19 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(path = "admin/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/admin/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void create(@RequestBody User user) throws BadRequestException{
         this.userService.create(user);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping(path = "admin/update/{id}")
+    @PutMapping(path = "/admin/update/{id}")
     public void update(@RequestBody User user,  @PathVariable("id") Integer id) throws BadRequestException{
         this.userService.update(user, id);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @DeleteMapping(path = "admin/delete/{id}")
+    @DeleteMapping(path = "/admin/delete/{id}")
     public void delete(@PathVariable("id") Integer id) throws BadRequestException {
         this.userService.delete(id);
     }
@@ -69,6 +88,25 @@ public class UserController {
     @GetMapping(path = "/user/{id}")
     public User read(@PathVariable("id") Integer id) throws BadRequestException {
         return this.userService.read(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(path = "/signin", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public SignInResponseDTO signin(@RequestBody SignInRequestDTO request) throws BadAuthenticationException {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
+        }
+        catch (BadCredentialsException e) {
+            throw new BadAuthenticationException(ErrorCodeEnum.BAD_CREDENTIALS, "Valeurs non reconnues!");
+        }
+
+        UserDetails userDetails = userDetailService
+                .loadUserByUsername(request.getUsername());
+        String token = jwtUtil.generateToken(userDetails);
+        SignInResponseDTO dto = new SignInResponseDTO(token);
+        return dto;
     }
 
     /*

@@ -1,7 +1,7 @@
 package fr.jacgrana.springsecurityjpa.security;
 
 import fr.jacgrana.springsecurityjpa.entity.User;
-import fr.jacgrana.springsecurityjpa.enums.ErrorCode;
+import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
 import fr.jacgrana.springsecurityjpa.exceptions.BadAuthenticationException;
 import fr.jacgrana.springsecurityjpa.service.MyUserDetailService;
 import fr.jacgrana.springsecurityjpa.service.UserService;
@@ -38,7 +38,7 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
                     user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.toString())).collect(Collectors.toList()));
         }
         else {
-            throw new BadAuthenticationException(ErrorCode.BAD_CREDENTIALS, "Authentification ko!");
+            throw new BadAuthenticationException(ErrorCodeEnum.BAD_CREDENTIALS, "Authentification ko!");
         }
 
     }

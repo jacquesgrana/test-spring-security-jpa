@@ -1,6 +1,5 @@
 package fr.jacgrana.springsecurityjpa.dto;
 
-import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorDTO {
+public class SignInRequestDTO {
 
-    private ErrorCodeEnum code;
-    private String message;
-
+    String username;
+    String password;
 }
