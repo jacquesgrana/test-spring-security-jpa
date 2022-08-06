@@ -53,7 +53,7 @@ public class UserService {
             String encodedPassword = bCryptPasswordEncoder.encode(updatedUser.getPassword());
             //System.out.println("Encoded password : " + encodedPassword);
             userInDb.setPassword(encodedPassword);
-            userInDb.setRoles(updatedUser.getRoles());
+            userInDb.setRole(updatedUser.getRole());
             userRepository.save(userInDb);
         }
     }

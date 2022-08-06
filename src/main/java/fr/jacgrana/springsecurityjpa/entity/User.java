@@ -36,10 +36,16 @@ public class User {
     @Column(name = "roles", nullable = false)
     private String roles;
 */
+
+    /*
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="User_role",
             joinColumns= @JoinColumn(name="user_id", referencedColumnName="id"),
             inverseJoinColumns= @JoinColumn(name="role_id", referencedColumnName="id"))
     private List<Role> roles = new ArrayList<>();
+*/
 
+    @ManyToOne
+    @JoinColumn(name="id_role", nullable=false)
+    private Role role;
 }
