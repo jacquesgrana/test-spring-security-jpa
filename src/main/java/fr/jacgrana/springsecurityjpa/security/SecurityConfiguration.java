@@ -30,6 +30,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,9 +84,9 @@ public class SecurityConfiguration {
         return http.build();*/
 
         http
+                .addFilterBefore(corsFilter(), SessionManagementFilter.class) //adds your custom CorsFilter
                 .authorizeRequests(
                         (query)-> query
-
                                 .antMatchers(HttpMethod.GET, "/admin").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
                                 .antMatchers(HttpMethod.POST, "/admin/create").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
                                 .antMatchers(HttpMethod.PUT, "/admin/update/{id}").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
@@ -98,8 +99,10 @@ public class SecurityConfiguration {
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler()) // .accessDeniedPage("/403.html")
                 .authenticationEntryPoint(jwtEntryPoint)
                 //.and().cors()
+                //.and().cors()
                 .and().csrf().disable()
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic().disable();
+                //.httpBasic(Customizer.withDefaults());
         //jwtUtil = new JWTUtil();
         //jwtRequestFilter = new JwtRequestFilter(myUserDetailService, jwtUtil, "Authorization");
         //httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -119,6 +122,13 @@ public class SecurityConfiguration {
     public AccessDeniedHandler accessDeniedHandler() {
         return new MyAccesDeniedHandler();
     }
+
+    @Bean
+    CorsFilter corsFilter() {
+        CorsFilter filter = new CorsFilter();
+        return filter;
+    }
+
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer () {

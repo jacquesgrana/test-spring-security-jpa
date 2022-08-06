@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5500/*")
 //@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE) //path = "user",
 public class UserController {
 
