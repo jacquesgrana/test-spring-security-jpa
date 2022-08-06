@@ -1,5 +1,6 @@
 package fr.jacgrana.springsecurityjpa.service;
 
+import fr.jacgrana.springsecurityjpa.entity.Role;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
 import fr.jacgrana.springsecurityjpa.exceptions.BadRequestException;
@@ -63,5 +64,12 @@ public class UserService {
         if (userToDelete != null) {
             this.userRepository.delete(userToDelete);
         }
+    }
+
+    // TODO faire methode qui renvoie le role d'un user trouvé par son username
+
+    public Role getUserRoleByUsername(String username) throws BadRequestException {
+        User user = this.findByUsername(username);
+        return user.getRole();
     }
 }

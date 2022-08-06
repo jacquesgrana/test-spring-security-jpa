@@ -3,6 +3,7 @@ package fr.jacgrana.springsecurityjpa.controller;
 import fr.jacgrana.springsecurityjpa.dto.ErrorDTO;
 import fr.jacgrana.springsecurityjpa.dto.SignInRequestDTO;
 import fr.jacgrana.springsecurityjpa.dto.SignInResponseDTO;
+import fr.jacgrana.springsecurityjpa.entity.Role;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
 import fr.jacgrana.springsecurityjpa.exceptions.BadAuthenticationException;
@@ -77,6 +78,15 @@ public class UserController {
     @DeleteMapping(path = "/admin/delete/{id}")
     public void delete(@PathVariable("id") Integer id) throws BadRequestException {
         this.userService.delete(id);
+    }
+
+    // TODO faire methode getRoleByUsername pour /user/role/{username} qui renvoie le role
+    // TODO autoriser pour tout le monde dans security config
+
+    @GetMapping("/user/role/{username}")
+    //@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public Role getRoleByUsername (@PathVariable("username") String username) throws BadRequestException {
+        return this.userService.getUserRoleByUsername(username);
     }
 
     @GetMapping("/user")

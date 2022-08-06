@@ -83,6 +83,7 @@ public class SecurityConfiguration {
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();*/
 
+        // /user/role/{username}
         http
                 .addFilterBefore(corsFilter(), SessionManagementFilter.class) //adds your custom CorsFilter
                 .authorizeRequests(
@@ -95,6 +96,7 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.GET, "/user/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
                                 .antMatchers(HttpMethod.GET, "/user/all").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
                                 .antMatchers(HttpMethod.GET, "/user").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
+                                .antMatchers(HttpMethod.GET, "/user/role/{username}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                                 .anyRequest().authenticated())
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler()) // .accessDeniedPage("/403.html")
                 .authenticationEntryPoint(jwtEntryPoint)
@@ -135,7 +137,8 @@ public class SecurityConfiguration {
         return (web) -> web.ignoring()
                 .antMatchers(POST,"/signin")
                 .antMatchers(GET,"/")
-                .antMatchers(GET,"/unauthorized"); //.antMatchers(GET,"/unauthorized")
+                .antMatchers(GET,"/unauthorized")
+                .antMatchers(GET,"/user/role/{username}"); //.antMatchers(GET,"/unauthorized")
     }
 
 
