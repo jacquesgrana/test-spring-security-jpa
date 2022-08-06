@@ -108,7 +108,7 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping(path = "/signin", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/signin") //, consumes = MediaType.APPLICATION_JSON_VALUE
     public SignInResponseDTO signin(@RequestBody SignInRequestDTO request) throws BadAuthenticationException {
         try {
             authenticationManager.authenticate(
