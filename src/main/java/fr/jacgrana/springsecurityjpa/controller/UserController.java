@@ -80,8 +80,14 @@ public class UserController {
         this.userService.delete(id);
     }
 
-    // TODO faire methode getRoleByUsername pour /user/role/{username} qui renvoie le role
-    // TODO autoriser pour tout le monde dans security config
+    // TODO faire methode getUserByUsername pour /user/username/{username} qui renvoie l'user'
+    // TODO autoriser pour manager et admin dans security config
+
+    @GetMapping("/user/username/{username}")
+    //@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public User getUserByUsername (@PathVariable("username") String username) throws BadRequestException {
+        return this.userService.findByUsername(username);
+    }
 
     @GetMapping("/user/role/{username}")
     //@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
