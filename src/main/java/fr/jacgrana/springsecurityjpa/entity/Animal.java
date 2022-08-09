@@ -38,8 +38,8 @@ public class Animal {
 
     @Column(name = "birth", nullable=false)
     private LocalDate birth;
-
+/*
     @ManyToOne
     @JoinColumn(name = "id_user")
-    private User user;
+    private User user;*/
 }
