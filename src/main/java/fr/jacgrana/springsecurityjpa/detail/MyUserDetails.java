@@ -34,6 +34,9 @@ public class MyUserDetails implements UserDetails {
             //System.out.println("log : " + role.getLabel().toString());
         }*/
        // this.authorities = Arrays.stream(user.getRoles().split(",")).map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
+
+
+        // TODO ajouter list Animal ?
     }
 
     public MyUserDetails() {
