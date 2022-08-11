@@ -41,4 +41,12 @@ public class AnimalService {
             this.animalRepository.save(animalInDb);
         }
     }
+
+
+    public void delete(Integer id) throws BadRequestException {
+        Animal animalInDb = this.getById(id);
+        if (animalInDb != null) {
+            this.animalRepository.delete(animalInDb);
+        }
+    }
 }

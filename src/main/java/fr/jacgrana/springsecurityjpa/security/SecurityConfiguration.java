@@ -80,6 +80,8 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.GET, "/animal/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                                 .antMatchers(HttpMethod.POST, "/animal/create").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                                 .antMatchers(HttpMethod.PUT, "/animal/update/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
+                                .antMatchers(HttpMethod.DELETE, "/animal/delete/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
+                                ///animal/delete/{id}
 
                                 .anyRequest().authenticated())
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler()) // .accessDeniedPage("/403.html")

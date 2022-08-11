@@ -45,4 +45,11 @@ public class AnimalController {
     public void update(@RequestBody Animal animal,  @PathVariable("id") Integer id) throws BadRequestException{
         this.animalService.update(animal, id);
     }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping(path = "/animal/delete/{id}")
+    public void delete(@PathVariable("id") Integer id) throws BadRequestException {
+        this.animalService.delete(id);
+    }
 }
