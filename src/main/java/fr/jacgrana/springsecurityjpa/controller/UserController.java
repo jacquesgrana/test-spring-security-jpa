@@ -49,6 +49,12 @@ public class UserController {
         return("<h1>Bienvenue</h1>");
     }
 
+    @GetMapping("/user")
+    //@RequestMapping(produces = MediaType.APPLICATION_XHTML_XML)
+    public String user() {
+        return("<h1>Bienvenue utilisateur</h1>");
+    }
+
     @GetMapping("/manager")
     public String manager() {
         return("<h1>Bienvenue manager</h1>");
@@ -93,12 +99,6 @@ public class UserController {
     //@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Role getRoleByUsername (@PathVariable("username") String username) throws BadRequestException {
         return this.userService.getUserRoleByUsername(username);
-    }
-
-    @GetMapping("/user")
-    //@RequestMapping(produces = MediaType.APPLICATION_XHTML_XML)
-    public String user() {
-        return("<h1>Bienvenue utilisateur</h1>");
     }
 
     @GetMapping("/user/all")
