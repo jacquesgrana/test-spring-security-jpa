@@ -38,4 +38,11 @@ public class AnimalController {
     public void create(@RequestBody Animal animal) throws BadRequestException{
         this.animalService.create(animal);
     }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+   // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping(path = "/animal/update/{id}")
+    public void update(@RequestBody Animal animal,  @PathVariable("id") Integer id) throws BadRequestException{
+        this.animalService.update(animal, id);
+    }
 }

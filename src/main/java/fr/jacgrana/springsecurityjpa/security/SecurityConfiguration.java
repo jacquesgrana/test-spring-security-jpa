@@ -67,7 +67,7 @@ public class SecurityConfiguration {
                 .authorizeRequests(
                         (query)-> query
                                 .antMatchers(HttpMethod.GET, "/admin").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
-                                .antMatchers(HttpMethod.POST, "/admin/create").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
+                                .antMatchers(HttpMethod.POST, "/admin/create").hasRole(UserRoleEnum.ROLE_ADMIN.toString()) // TODO modifier chemin : /admin/user/create idem pour les deux lignes d'après
                                 .antMatchers(HttpMethod.PUT, "/admin/update/{id}").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
                                 .antMatchers(HttpMethod.DELETE, "/admin/delete/{id}").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
                                 .antMatchers(HttpMethod.GET, "/manager").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
@@ -77,9 +77,10 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.GET, "/user/role/{username}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                                 .antMatchers(HttpMethod.GET, "/user/username/{username}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
                                 .antMatchers(HttpMethod.GET, "/animal/all").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
-                                .antMatchers(HttpMethod.GET, "/animal/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                                .antMatchers(HttpMethod.GET, "/animal/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                                 .antMatchers(HttpMethod.POST, "/animal/create").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
-                                ///animal/create
+                                .antMatchers(HttpMethod.PUT, "/animal/update/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
+
                                 .anyRequest().authenticated())
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler()) // .accessDeniedPage("/403.html")
                 .authenticationEntryPoint(jwtEntryPoint)

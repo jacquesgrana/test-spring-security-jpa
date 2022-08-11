@@ -23,10 +23,22 @@ public class AnimalService {
     }
 
     public Animal getById(Integer id) throws BadRequestException {
-        Optional<Animal> animal = animalRepository.findById(id);
+        Optional<Animal> animal = this.animalRepository.findById(id);
         return animal.orElseThrow(() -> new BadRequestException(ErrorCodeEnum.USER_NOT_FOUND, "Pas d'animal avec cet id : " + id));
     }
     public void create(Animal animal) {
         this.animalRepository.save(animal);
+    }
+
+    public void update(Animal animal, Integer id) throws BadRequestException {
+        Animal animalInDb = this.getById(id);
+        if (animalInDb != null) {
+            animalInDb.setAnimalType(animal.getAnimalType());
+            animalInDb.setBirth(animal.getBirth());
+            animalInDb.setComment(animal.getComment());
+            animalInDb.setGenre(animal.getGenre());
+            animalInDb.setName(animal.getName());
+            this.animalRepository.save(animalInDb);
+        }
     }
 }
