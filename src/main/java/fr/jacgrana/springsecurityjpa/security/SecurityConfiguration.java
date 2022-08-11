@@ -76,8 +76,10 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.GET, "/user").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                                 .antMatchers(HttpMethod.GET, "/user/role/{username}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                                 .antMatchers(HttpMethod.GET, "/user/username/{username}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
-                                .antMatchers(HttpMethod.GET, "/user/animal/all").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
+                                .antMatchers(HttpMethod.GET, "/animal/all").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
                                 .antMatchers(HttpMethod.GET, "/animal/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
+                                .antMatchers(HttpMethod.POST, "/animal/create").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString(), UserRoleEnum.ROLE_USER.toString())
+                                ///animal/create
                                 .anyRequest().authenticated())
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler()) // .accessDeniedPage("/403.html")
                 .authenticationEntryPoint(jwtEntryPoint)
