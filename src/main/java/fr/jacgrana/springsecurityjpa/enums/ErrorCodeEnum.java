@@ -7,5 +7,7 @@ public enum ErrorCodeEnum {
 
     USER_NOT_FOUND,
 
-    BAD_CREDENTIALS
+    BAD_CREDENTIALS,
+
+    ANIMAL_ALREADY_EXISTS
 }

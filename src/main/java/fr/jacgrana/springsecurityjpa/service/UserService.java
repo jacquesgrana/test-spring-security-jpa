@@ -1,5 +1,6 @@
 package fr.jacgrana.springsecurityjpa.service;
 
+import fr.jacgrana.springsecurityjpa.entity.Animal;
 import fr.jacgrana.springsecurityjpa.entity.Role;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,17 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AnimalService animalService;
+
+    public UserService() {
+    }
+
+    public UserService(UserRepository userRepository, AnimalService animalService) {
+        this.userRepository = userRepository;
+        this.animalService = animalService;
+    }
 
     public User findByUsername(String username) throws BadRequestException {
         Optional<User> user = userRepository.findByUserName(username);
@@ -71,5 +84,20 @@ public class UserService {
     public Role getUserRoleByUsername(String username) throws BadRequestException {
         User user = this.findByUsername(username);
         return user.getRole();
+    }
+
+    public void userToAnimalLink(Integer userId, Integer animalId) throws BadRequestException {
+        User user = this.read(userId);
+        Animal animal = this.animalService.getById(animalId);
+        //List<Animal> animals;
+        if(user.getAnimals() == null) {
+            user.setAnimals(new ArrayList<Animal>());
+        }
+        Optional<Animal> existingAnimal = user.getAnimals().stream().filter(a -> a.getId() == animalId).findFirst();
+        if (existingAnimal.isPresent()) {
+            throw new BadRequestException(ErrorCodeEnum.ANIMAL_ALREADY_EXISTS, "cet animal est déjà attribué a cet user.");
+        }
+        user.getAnimals().add(animal);
+        this.userRepository.save(user);
     }
 }

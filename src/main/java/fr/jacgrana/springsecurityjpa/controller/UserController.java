@@ -1,8 +1,8 @@
 package fr.jacgrana.springsecurityjpa.controller;
 
-import fr.jacgrana.springsecurityjpa.dto.ErrorDTO;
 import fr.jacgrana.springsecurityjpa.dto.SignInRequestDTO;
 import fr.jacgrana.springsecurityjpa.dto.SignInResponseDTO;
+import fr.jacgrana.springsecurityjpa.dto.UserAnimalLinkDTO;
 import fr.jacgrana.springsecurityjpa.entity.Role;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
@@ -19,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -139,4 +140,9 @@ public class UserController {
         this.userService.create(user);
     }*/
 
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PostMapping("/admin/user/link/animal")
+    public void addAnimalToUser(@RequestBody UserAnimalLinkDTO userAnimalLinkDto) throws BadRequestException {
+        this.userService.userToAnimalLink(userAnimalLinkDto.getIdUSer(), userAnimalLinkDto.getIdAnimal());
+    }
 }

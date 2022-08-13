@@ -17,7 +17,6 @@ public class AnimalController {
 
     AnimalService animalService;
 
-
     public AnimalController(AnimalService animalService) {
         this.animalService = animalService;
     }
