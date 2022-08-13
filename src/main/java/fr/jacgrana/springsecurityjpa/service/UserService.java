@@ -101,6 +101,20 @@ public class UserService {
         this.userRepository.save(user);
     }
 
+    public void userToAnimalUnlink(Integer userId, Integer animalId) throws BadRequestException {
+        User user = this.read(userId);
+        Animal animal = this.animalService.getById(animalId);
+        //List<Animal> animals;
+        if(user.getAnimals() == null) {
+            user.setAnimals(new ArrayList<Animal>());
+        }
+        Optional<Animal> existingAnimal = user.getAnimals().stream().filter(a -> a.getId() == animalId).findFirst();
+        if (existingAnimal.isPresent()) {
+            user.getAnimals().remove(animal);
+            this.userRepository.save(user);
+        }
+    }
+
     /*
     public Integer getUserIdFromAnimalId(Integer animalId) {
         return userRepository.findUserIdFromAnimalIdOrNull(animalId);

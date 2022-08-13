@@ -70,8 +70,9 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.POST, "/admin/create").hasRole(UserRoleEnum.ROLE_ADMIN.toString()) // TODO modifier chemin : /admin/user/create idem pour les deux lignes d'après
                                 .antMatchers(HttpMethod.PUT, "/admin/update/{id}").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
                                 .antMatchers(HttpMethod.DELETE, "/admin/delete/{id}").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
-                                // /admin/user/link/animal
+                                // /admin/user/link/animal // /admin/user/unlink/animal
                                 .antMatchers(POST, "/admin/user/link/animal").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
+                                .antMatchers(POST, "/admin/user/unlink/animal").hasRole(UserRoleEnum.ROLE_ADMIN.toString())
 
                                 .antMatchers(HttpMethod.GET, "/manager").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())
                                 .antMatchers(HttpMethod.GET, "/user/{id}").hasAnyRole(UserRoleEnum.ROLE_ADMIN.toString(), UserRoleEnum.ROLE_MANAGER.toString())

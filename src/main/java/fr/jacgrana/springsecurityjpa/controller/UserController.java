@@ -145,6 +145,13 @@ public class UserController {
     public void addAnimalToUser(@RequestBody UserAnimalLinkDTO userAnimalLinkDto) throws BadRequestException {
         this.userService.userToAnimalLink(userAnimalLinkDto.getIdUSer(), userAnimalLinkDto.getIdAnimal());
     }
+
+    //userToAnimalUnlink
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PostMapping("/admin/user/unlink/animal")
+    public void removeAnimalToUser(@RequestBody UserAnimalLinkDTO userAnimalLinkDto) throws BadRequestException {
+        this.userService.userToAnimalUnlink(userAnimalLinkDto.getIdUSer(), userAnimalLinkDto.getIdAnimal());
+    }
 /*
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping("/admin/user/linked/animal/{animalId}")
