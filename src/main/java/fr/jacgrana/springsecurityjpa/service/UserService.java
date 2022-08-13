@@ -100,4 +100,9 @@ public class UserService {
         user.getAnimals().add(animal);
         this.userRepository.save(user);
     }
+
+    /*
+    public Integer getUserIdFromAnimalId(Integer animalId) {
+        return userRepository.findUserIdFromAnimalIdOrNull(animalId);
+    }*/
 }

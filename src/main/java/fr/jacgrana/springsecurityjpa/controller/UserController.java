@@ -145,4 +145,12 @@ public class UserController {
     public void addAnimalToUser(@RequestBody UserAnimalLinkDTO userAnimalLinkDto) throws BadRequestException {
         this.userService.userToAnimalLink(userAnimalLinkDto.getIdUSer(), userAnimalLinkDto.getIdAnimal());
     }
+/*
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PostMapping("/admin/user/linked/animal/{animalId}")
+    public Integer getUserIdFromAnimalId(@PathVariable("animalId") Integer animalId) throws BadRequestException {
+        Integer userId = null;
+        userId = this.userService.getUserIdFromAnimalId(animalId);
+        return userId;
+    }*/
 }
