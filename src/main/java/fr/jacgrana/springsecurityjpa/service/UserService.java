@@ -62,12 +62,15 @@ public class UserService {
     public void update(User updatedUser, Integer id) throws BadRequestException {
         User userInDb = this.read(id);
         if (userInDb != null) {
+            if (!userInDb.getPassword().equals(updatedUser.getPassword())) {
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(8);
+                String encodedPassword = bCryptPasswordEncoder.encode(updatedUser.getPassword());
+                userInDb.setPassword(encodedPassword);
+            }
             userInDb.setActive(updatedUser.getActive());
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(8);
-            String encodedPassword = bCryptPasswordEncoder.encode(updatedUser.getPassword());
-            //System.out.println("Encoded password : " + encodedPassword);
-            userInDb.setPassword(encodedPassword);
+            userInDb.setUserName(updatedUser.getUserName());
             userInDb.setRole(updatedUser.getRole());
+            userInDb.setAnimals(updatedUser.getAnimals());
             userRepository.save(userInDb);
         }
     }
