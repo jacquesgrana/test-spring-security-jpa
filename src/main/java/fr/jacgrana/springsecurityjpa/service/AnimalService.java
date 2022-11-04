@@ -15,6 +15,7 @@ import java.util.Optional;
 @Service
 public class AnimalService {
 
+
     @Autowired
     AnimalRepository animalRepository;
 
@@ -24,7 +25,7 @@ public class AnimalService {
 
     public Animal getById(Integer id) throws BadRequestException {
         Optional<Animal> animal = this.animalRepository.findById(id);
-        return animal.orElseThrow(() -> new BadRequestException(ErrorCodeEnum.USER_NOT_FOUND, "Pas d'animal avec cet id : " + id));
+        return animal.orElseThrow(() -> new BadRequestException(ErrorCodeEnum.ANIMAL_NOT_FOUND, "Pas d'animal avec cet id : " + id));
     }
     public void create(Animal animal) {
         this.animalRepository.save(animal);
