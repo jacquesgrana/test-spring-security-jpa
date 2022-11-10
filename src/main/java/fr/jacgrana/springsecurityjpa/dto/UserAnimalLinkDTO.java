@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserAnimalLinkDTO {
     @NotNull
-    private Integer idUSer;
+    private Integer idUser;
     @NotNull
     private Integer idAnimal;
 }

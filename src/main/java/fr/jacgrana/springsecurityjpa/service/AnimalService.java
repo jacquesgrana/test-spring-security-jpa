@@ -5,12 +5,12 @@ import fr.jacgrana.springsecurityjpa.entity.User;
 import fr.jacgrana.springsecurityjpa.enums.ErrorCodeEnum;
 import fr.jacgrana.springsecurityjpa.exceptions.BadRequestException;
 import fr.jacgrana.springsecurityjpa.repository.AnimalRepository;
+import fr.jacgrana.springsecurityjpa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AnimalService {
@@ -18,6 +18,8 @@ public class AnimalService {
 
     @Autowired
     AnimalRepository animalRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public List<Animal> findAll() {
         return this.animalRepository.findAll();
@@ -49,5 +51,26 @@ public class AnimalService {
         if (animalInDb != null) {
             this.animalRepository.delete(animalInDb);
         }
+    }
+
+    public List<Animal> getOrphans() {
+        Set<Animal> possessedAnimals = new HashSet<>();
+        List<Animal> orphanAnimals = new ArrayList<>();
+        List<Animal> animals = findAll();
+        List<User> userList = userRepository.findAll();
+        userList.stream().forEach(
+                u -> {
+                u.getAnimals().stream().forEach(a -> possessedAnimals.add(a));
+            }
+        );
+
+        animals.stream().forEach(
+                a -> {
+                    if (!possessedAnimals.contains(a)) {
+                        orphanAnimals.add(a);
+                    }
+                }
+        );
+        return orphanAnimals;
     }
 }

@@ -1,5 +1,6 @@
 package fr.jacgrana.springsecurityjpa.controller;
 
+import fr.jacgrana.springsecurityjpa.dto.UserAnimalLinkDTO;
 import fr.jacgrana.springsecurityjpa.entity.Animal;
 import fr.jacgrana.springsecurityjpa.entity.User;
 import fr.jacgrana.springsecurityjpa.exceptions.BadRequestException;
@@ -50,5 +51,15 @@ public class AnimalController {
     @DeleteMapping(path = "/animal/delete/{id}")
     public void delete(@PathVariable("id") Integer id) throws BadRequestException {
         this.animalService.delete(id);
+    }
+
+    /**
+     *
+     * @throws BadRequestException
+     */
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @GetMapping("/animal/orphans")
+    public List<Animal>  getOrphansAnimals() throws BadRequestException {
+        return this.animalService.getOrphans();
     }
 }

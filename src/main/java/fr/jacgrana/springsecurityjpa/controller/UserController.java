@@ -143,14 +143,14 @@ public class UserController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping("/admin/user/link/animal")
     public void addAnimalToUser(@RequestBody UserAnimalLinkDTO userAnimalLinkDto) throws BadRequestException {
-        this.userService.userToAnimalLink(userAnimalLinkDto.getIdUSer(), userAnimalLinkDto.getIdAnimal());
+        this.userService.userToAnimalLink(userAnimalLinkDto.getIdUser(), userAnimalLinkDto.getIdAnimal());
     }
 
     //userToAnimalUnlink
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping("/admin/user/unlink/animal")
     public void removeAnimalToUser(@RequestBody UserAnimalLinkDTO userAnimalLinkDto) throws BadRequestException {
-        this.userService.userToAnimalUnlink(userAnimalLinkDto.getIdUSer(), userAnimalLinkDto.getIdAnimal());
+        this.userService.userToAnimalUnlink(userAnimalLinkDto.getIdUser(), userAnimalLinkDto.getIdAnimal());
     }
 /*
     @ResponseStatus(HttpStatus.ACCEPTED)
